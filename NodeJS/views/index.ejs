@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HomeR</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="/javascripts/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <!-- AngularJS -->
+    <script src="/javascripts/angular.min.js"></script>
+
+    <script type="text/javascript">
+        window.onbeforeunload = function(){
+            $.ajax({
+                type: 'DELETE',
+                async: false,
+                url: '/'
+            });
+            return 'Tem certeza?';
+        };
+    </script>
+
+</head>
+<body ng-app="app" ng-controller="app" ng-style="{'background-color' : color}">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4 col-md-4 col-xs-12 text-center">
+                <span class="title">HomeR<span class="undertitle">obotics</span></span>
+                <div class="row">
+                    <div class="col-xs-2 col-sm-6">
+                        <h3>usuário <%= numero%></h3>
+                    </div>
+                    <div class="col-xs-2 col-sm-6">
+                        <h3>{{time}}<br/><small>{{uptime}}</small></h3>
+                    </div>
+                    <div class="col-sm-12">
+                        <h4><strong>conectado à:</strong> <img ng-attr-src="{{resource}}" width="25" height="auto"/></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span class="hint">Mova o mouse para recarregar!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-4 col-xs-6 text-center">
+                <img src="/images/battery-icon.png" width="100" height="auto" />
+                <br/>
+                <h2><small>recarregando</small><br>
+                    <span>{{ renews }} mW/s</span><br>
+                    <span ng-init="renewh = <%= renewh%>">{{ renewh.toFixed(2) }} W</span></h2>
+                <hr ng-show="total" ng-cloak />
+                <h2><small>recarga <strong>total</strong></small><br>
+                    <span ng-show="!total.error">{{ total.batt.toFixed(2) }} W</span>
+                    <span ng-show="total.error" class="text-danger">desconectado</span>
+                </h2>
+            </div>
+            <div class="col-sm-4 col-md-4 col-xs-6 text-center">
+                <img src="/images/battery-icon.png" width="100" height="auto" />
+                <br/>
+                <h2><small><strong><%= comodo%></strong> (consumo)</small><br>
+                    <span>{{ powers }} mW/s</span><br>
+                    <span ng-init="powerh = <%= powerh%>">{{ powerh.toFixed(2) }} W</span></h2>
+                <hr ng-show="total" ng-cloak />
+                <h2><div ng-show="!total.error">
+                        <small><strong>total líquido</strong></small><br>
+                        <span>{{ total.powerh.toFixed(2) }} W</span><br>
+                        <small><strong>total bruto</strong></small><br>
+                        <span>{{ total.powerb.toFixed(2) }} W</span>
+                    </div>
+                    <span ng-show="total.error" class="text-danger">desconectado</span>
+                </h2>
+            </div>
+        </div>
+    </div>
+<script src="/javascripts/controller.js"></script>
+</body>
+</html>

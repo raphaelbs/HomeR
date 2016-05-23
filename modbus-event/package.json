@@ -1,0 +1,21 @@
+{
+  "author": {
+    "name": "Raphael Brandão"
+  },
+  "dependencies": {
+    "modbus-serial": "^4.1.0"
+  },
+  "description": "Modbus-event is a TCP/IP Master, event-driven, implementation for modbus protocol.",
+  "keywords": [
+    "event-driven",
+    "modbus",
+    "tcp/ip"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "modbus-event",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.1.9"
+}

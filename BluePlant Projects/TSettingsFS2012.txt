@@ -1,0 +1,2 @@
+DefaultProjectPath=C:\BluePlant Projects\
+SearchPaths=C:\BluePlant Projects\,True,,,True;C:\BluePlant Projects\Samples\,True,,,True;
