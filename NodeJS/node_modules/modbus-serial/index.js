@@ -1,0 +1,571 @@
+'use strict';
+/**
+ * Copyright (c) 2015, Yaacov Zamir <kobi.zamir@gmail.com>
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF  THIS SOFTWARE.
+ */
+
+/* Add bit operation functions to Buffer
+ */
+require('./utils/buffer_bit')();
+var crc16 = require('./utils/crc16');
+
+/**
+ * @fileoverview ModbusRTU module, exports the ModbusRTU class.
+ * this class makes ModbusRTU calls fun and easy.
+ *
+ * Modbus is a serial communications protocol, first used in 1979.
+ * Modbus is simple and robust, openly published, royalty-free and
+ * easy to deploy and maintain.
+ */
+
+/**
+ * Parse the data for a Modbus -
+ * Read Coils (FC=02, 01)
+ *
+ * @param {Buffer} data the data buffer to parse.
+ * @param {Function} next the function to call next.
+ */
+function _readFC2(data, next) {
+    var length = data.readUInt8(2);
+    var contents = [];
+
+    for (var i = 0; i < length; i++) {
+        var reg = data[i + 3];
+
+        for (var j = 0; j < 8; j++) {
+            contents.push((reg & 1) == 1);
+            reg = reg >> 1;
+        }
+    }
+
+    if (next)
+        next(null, {"data": contents, "buffer": data.slice(3, 3 + length)});
+}
+
+/**
+ * Parse the data for a Modbus -
+ * Read Input Registers (FC=04, 03)
+ *
+ * @param {Buffer} data the data buffer to parse.
+ * @param {Function} next the function to call next.
+ */
+function _readFC4(data, next) {
+    var length = data.readUInt8(2);
+    var contents = [];
+
+    for (var i = 0; i < length; i += 2) {
+        var reg = data.readUInt16BE(i + 3);
+        contents.push(reg);
+    }
+
+    if (next)
+        next(null, {"data": contents, "buffer": data.slice(3, 3 + length)});
+}
+
+/**
+ * Parse the data for a Modbus -
+ * Force Single Coil (FC=05)
+ *
+ * @param {Buffer} data the data buffer to parse.
+ * @param {Function} next the function to call next.
+ */
+function _readFC5(data, next) {
+    var dataAddress = data.readUInt16BE(2);
+    var state = data.readUInt16BE(4);
+
+    if (next)
+        next(null, {"address": dataAddress, "state": (state == 0xff00)});
+}
+
+/**
+ * Parse the data for a Modbus -
+ * Preset Single Registers (FC=06)
+ *
+ * @param {Buffer} data the data buffer to parse.
+ * @param {Function} next the function to call next.
+ */
+function _readFC6(data, next) {
+    var dataAddress = data.readUInt16BE(2);
+    var value = data.readUInt16BE(4);
+
+    if (next)
+        next(null, {"address": dataAddress, "value": value});
+}
+
+/**
+ * Parse the data for a Modbus -
+ * Preset Multiple Registers (FC=15, 16)
+ *
+ * @param {Buffer} data the data buffer to parse.
+ * @param {Function} next the function to call next.
+ */
+function _readFC16(data, next) {
+    var dataAddress = data.readUInt16BE(2);
+    var length = data.readUInt16BE(4);
+
+    if (next)
+        next(null, {"address": dataAddress, "length": length});
+}
+
+/**
+ * Class making ModbusRTU calls fun and easy.
+ *
+ * @param {SerialPort} port the serial port to use.
+ */
+var ModbusRTU = function (port) {
+    // the serial port to use
+    this._port = port;
+
+    // state variables
+    this._nextAddress = null; // unit address of current function call.
+    this._nextCode = null; // function code of current function call.
+    this._nextLength = 0; // number of bytes in current answer.
+    this._next = null; // the function to call on success or failure
+
+    this._unitID = 1;
+};
+
+/**
+ * Open the serial port and register Modbus parsers
+ *
+ * @param {Function} callback the function to call next on open success
+ *      of failure.
+ */
+ModbusRTU.prototype.open = function (callback) {
+    var modbus = this;
+
+    // open the serial port
+    modbus._port.open(function (error) {
+        if (error) {
+            /* On serial port open error
+            * call next function
+            */
+            if (callback)
+                callback(error);
+        } else {
+            /* On serial port open OK
+             * call next function
+             */
+            if (callback)
+                callback(error);
+
+            /* On serial port success
+             * register the modbus parser functions
+             */
+            modbus._port.on('data', function(data) {
+                // set locale helpers variables
+                var length = modbus._nextLength;
+                var next =  modbus._next;
+
+                /* check incoming data
+                 */
+
+                /* check minimal length
+                 */
+                if (data.length < 5) {
+                    error = "Data length error, expected " +
+                        length + " got " + data.length;
+                    if (next)
+                        next(error);
+                    return;
+                }
+
+                /* check message CRC
+                 * if CRC is bad raise an error
+                 */
+                var crcIn = data.readUInt16LE(data.length - 2);
+                if (crcIn != crc16(data.slice(0, -2))) {
+                    error = "CRC error";
+                    if (next)
+                        next(error);
+                    return;
+                }
+
+                // if crc is OK, read address and function code
+                var address = data.readUInt8(0);
+                var code = data.readUInt8(1);
+
+                /* check for modbus exception
+                 */
+                if (data.length == 5 &&
+                        code == (0x80 | modbus._nextCode)) {
+                    error = "Modbus exception " + data.readUInt8(2);
+                    if (next)
+                        next(error);
+                    return;
+                }
+
+                /* check message length
+                 * if we do not expect this data
+                 * raise an error
+                 */
+                if (data.length != length) {
+                    error = "Data length error, expected " +
+                        length + " got " + data.length;
+                    if (next)
+                        next(error);
+                    return;
+                }
+
+                /* check message address and code
+                 * if we do not expect this message
+                 * raise an error
+                 */
+                if (address != modbus._nextAddress || code != modbus._nextCode) {
+                    error = "Unexpected data error, expected " +
+                        modbus._nextAddress + " got " + address;
+                    if (next)
+                        next(error);
+                    return;
+                }
+
+                // data is OK - clear state variables
+                modbus._nextAddress = null;
+                modbus._nextCode = null;
+                modbus._next = null;
+
+                /* parse incoming data
+                 */
+
+                switch (code) {
+                    case 1:
+                    case 2:
+                        // Read Coil Status (FC=01)
+                        // Read Input Status (FC=02)
+                        _readFC2(data, next);
+                        break;
+                    case 3:
+                    case 4:
+                        // Read Input Registers (FC=04)
+                        // Read Holding Registers (FC=03)
+                        _readFC4(data, next);
+                        break;
+                    case 5:
+                        // Force Single Coil
+                        _readFC5(data, next);
+                        break;
+                    case 6:
+                        // Preset Single Register
+                        _readFC6(data, next);
+                        break;
+                    case 15:
+                    case 16:
+                        // Force Multiple Coils
+                        // Preset Multiple Registers
+                        _readFC16(data, next);
+                        break;
+                }
+            });
+        }
+    });
+};
+
+/**
+ * Write a Modbus "Read Coil Status" (FC=01) to serial port.
+ *
+ * @param {number} address the slave unit address.
+ * @param {number} dataAddress the Data Address of the first coil.
+ * @param {number} length the total number of coils requested.
+ * @param {Function} next the function to call next.
+ */
+ModbusRTU.prototype.writeFC1 = function (address, dataAddress, length, next) {
+    this.writeFC2(address, dataAddress, length, next, 1);
+};
+
+/**
+ * Write a Modbus "Read Input Status" (FC=02) to serial port.
+ *
+ * @param {number} address the slave unit address.
+ * @param {number} dataAddress the Data Address of the first digital input.
+ * @param {number} length the total number of digital inputs requested.
+ * @param {Function} next the function to call next.
+ */
+ModbusRTU.prototype.writeFC2 = function (address, dataAddress, length, next, code) {
+    // function code defaults to 2
+    code = code || 2;
+
+    // check port is actually open before attempting write
+    if( this._port.isOpen() === false) {
+        var error = "Port Not Open";
+        if (next) next(error);
+        return;
+    }
+
+    // set state variables
+    this._nextAddress = address;
+    this._nextCode = code;
+    this._nextLength = 3 + parseInt((length - 1) / 8 + 1) + 2;
+    this._next = next;
+
+    var codeLength = 6;
+    var buf = new Buffer(codeLength + 2); // add 2 crc bytes
+
+    buf.writeUInt8(address, 0);
+    buf.writeUInt8(code, 1);
+    buf.writeUInt16BE(dataAddress, 2);
+    buf.writeUInt16BE(length, 4);
+
+    // add crc bytes to buffer
+    buf.writeUInt16LE(crc16(buf.slice(0, -2)), codeLength);
+
+    // write buffer to serial port
+    this._port.write(buf);
+};
+
+/**
+ * Write a Modbus "Read Holding Registers" (FC=03) to serial port.
+ *
+ * @param {number} address the slave unit address.
+ * @param {number} dataAddress the Data Address of the first register.
+ * @param {number} length the total number of registers requested.
+ * @param {Function} next the function to call next.
+ */
+ModbusRTU.prototype.writeFC3 = function (address, dataAddress, length, next) {
+    this.writeFC4(address, dataAddress, length, next, 3);
+};
+
+/**
+ * Write a Modbus "Read Input Registers" (FC=04) to serial port.
+ *
+ * @param {number} address the slave unit address.
+ * @param {number} dataAddress the Data Address of the first register.
+ * @param {number} length the total number of registers requested.
+ * @param {Function} next the function to call next.
+ */
+ModbusRTU.prototype.writeFC4 = function (address, dataAddress, length, next, code) {
+    // function code defaults to 4
+    code = code || 4;
+
+    // check port is actually open before attempting write
+    if( this._port.isOpen() === false) {
+        var error = "Port Not Open";
+        if (next) next(error);
+        return;
+    }
+
+    // set state variables
+    this._nextAddress = address;
+    this._nextCode = code;
+    this._nextLength = 3 + 2 * length + 2;
+    this._next = next;
+
+    var codeLength = 6;
+    var buf = new Buffer(codeLength + 2); // add 2 crc bytes
+
+    buf.writeUInt8(address, 0);
+    buf.writeUInt8(code, 1);
+    buf.writeUInt16BE(dataAddress, 2);
+    buf.writeUInt16BE(length, 4);
+
+    // add crc bytes to buffer
+    buf.writeUInt16LE(crc16(buf.slice(0, -2)), codeLength);
+
+    // write buffer to serial port
+    this._port.write(buf);
+};
+
+/**
+ * Write a Modbus "Force Single Coil" (FC=05) to serial port.
+ *
+ * @param {number} address the slave unit address.
+ * @param {number} dataAddress the Data Address of the coil.
+ * @param {number} state the boolean state to write to the coil (true / false).
+ * @param {Function} next the function to call next.
+ */
+ModbusRTU.prototype.writeFC5 =  function (address, dataAddress, state, next) {
+    var code = 5;
+
+    // check port is actually open before attempting write
+    if( this._port.isOpen() === false) {
+        var error = "Port Not Open";
+        if (next) next(error);
+        return;
+    }
+
+    // set state variables
+    this._nextAddress = address;
+    this._nextCode = code;
+    this._nextLength = 8;
+    this._next = next;
+
+    var codeLength = 6;
+    var buf = new Buffer(codeLength + 2); // add 2 crc bytes
+
+    buf.writeUInt8(address, 0);
+    buf.writeUInt8(code, 1);
+    buf.writeUInt16BE(dataAddress, 2);
+
+    if (state) {
+        buf.writeUInt16BE(0xff00, 4);
+    } else {
+        buf.writeUInt16BE(0x0000, 4);
+    }
+
+    // add crc bytes to buffer
+    buf.writeUInt16LE(crc16(buf.slice(0, -2)), codeLength);
+
+    // write buffer to serial port
+    this._port.write(buf);
+};
+
+/**
+ * Write a Modbus "Preset Single Register " (FC=6) to serial port.
+ *
+ * @param {number} address the slave unit address.
+ * @param {number} dataAddress the Data Address of the register.
+ * @param {number} value the value to write to the register.
+ * @param {Function} next the function to call next.
+ */
+ModbusRTU.prototype.writeFC6 =  function (address, dataAddress, value, next) {
+    var code = 6;
+
+    // check port is actually open before attempting write
+    if( this._port.isOpen() === false) {
+        var error = "Port Not Open";
+        if (next) next(error);
+        return;
+    }
+
+    // set state variables
+    this._nextAddress = address;
+    this._nextCode = code;
+    this._nextLength = 8;
+    this._next = next;
+
+    var codeLength = 6; // 1B deviceAddress + 1B functionCode + 2B dataAddress + 2B value
+    var buf = new Buffer(codeLength + 2); // add 2 crc bytes
+
+    buf.writeUInt8(address, 0);
+    buf.writeUInt8(code, 1);
+    buf.writeUInt16BE(dataAddress, 2);
+
+    buf.writeUInt16BE(value, 4);
+
+    // add crc bytes to buffer
+    buf.writeUInt16LE(crc16(buf.slice(0, -2)), codeLength);
+
+    // write buffer to serial port
+    this._port.write(buf);
+};
+
+/**
+ * Write a Modbus "Force Multiple Coils" (FC=15) to serial port.
+ *
+ * @param {number} address the slave unit address.
+ * @param {number} dataAddress the Data Address of the first coil.
+ * @param {Array} array the array of boolean states to write to coils.
+ * @param {Function} next the function to call next.
+ */
+ModbusRTU.prototype.writeFC15 = function (address, dataAddress, array, next) {
+    var code = 15;
+
+    // check port is actually open before attempting write
+    if( this._port.isOpen() === false) {
+        var error = "Port Not Open";
+        if (next) next(error);
+        return;
+    }
+
+    // set state variables
+    this._nextAddress = address;
+    this._nextCode = code;
+    this._nextLength = 8;
+    this._next = next;
+
+    var dataBytes = Math.ceil(array.length / 8);
+    var codeLength = 7 + dataBytes;
+    var buf = new Buffer(codeLength + 2);  // add 2 crc bytes
+
+    buf.writeUInt8(address, 0);
+    buf.writeUInt8(code, 1);
+    buf.writeUInt16BE(dataAddress, 2);
+    buf.writeUInt16BE(array.length, 4);
+    buf.writeUInt8(dataBytes, 6);
+
+    // clear the data bytes before writing bits data
+    for (var i = 0; i < dataBytes; i++) {
+        buf.writeUInt8(0, 7 + i);
+    }
+
+    for (var i = 0; i < array.length; i++) {
+        // buffer bits are already all zero (0)
+        // only set the ones set to one (1)
+        if (array[i]) {
+            buf.writeBit(1, i, 7);
+        }
+    }
+
+    // add crc bytes to buffer
+    buf.writeUInt16LE(crc16(buf.slice(0, -2)), codeLength);
+
+    // write buffer to serial port
+    this._port.write(buf);
+};
+
+/**
+ * Write a Modbus "Preset Multiple Registers" (FC=16) to serial port.
+ *
+ * @param {number} address the slave unit address.
+ * @param {number} dataAddress the Data Address of the first register.
+ * @param {Array} array the array of values to write to registers.
+ * @param {Function} next the function to call next.
+ */
+ModbusRTU.prototype.writeFC16 =  function (address, dataAddress, array, next) {
+    var code = 16;
+
+    // check port is actually open before attempting write
+    if( this._port.isOpen() === false) {
+        var error = "Port Not Open";
+        if (next) next(error);
+        return;
+    }
+
+    // set state variables
+    this._nextAddress = address;
+    this._nextCode = code;
+    this._nextLength = 8;
+    this._next = next;
+
+    var codeLength = 7 + 2 * array.length;
+    var buf = new Buffer(codeLength + 2); // add 2 crc bytes
+
+    buf.writeUInt8(address, 0);
+    buf.writeUInt8(code, 1);
+    buf.writeUInt16BE(dataAddress, 2);
+    buf.writeUInt16BE(array.length, 4);
+    buf.writeUInt8(array.length * 2, 6);
+
+    for (var i = 0; i < array.length; i++) {
+        buf.writeUInt16BE(array[i], 7 + 2 * i);
+    }
+
+    // add crc bytes to buffer
+    buf.writeUInt16LE(crc16(buf.slice(0, -2)), codeLength);
+
+    // write buffer to serial port
+    this._port.write(buf);
+};
+
+// add the connection shorthand API
+require('./apis/connection')(ModbusRTU);
+
+// add the promise API
+require('./apis/promise')(ModbusRTU);
+
+// exports
+module.exports = ModbusRTU;
+module.exports.TestPort = require('./ports/testport');
+module.exports.TcpPort = require('./ports/tcpport');
+module.exports.TelnetPort = require('./ports/telnetport');
+module.exports.C701Port = require('./ports/c701port');
