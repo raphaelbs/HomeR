@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.material.homer.MainActivity"
+    android:background="@drawable/background"
+    >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="@drawable/background_bottom"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/view" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/view"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comodo 1"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="5dp"/>
+
+                <org.material.homer.ToggleButton
+                    android:id="@+id/room_1_toggle"
+                    android:layout_width="60dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/room_1_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100kW"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="15dp"
+                    android:padding="10dp"
+                    android:background="#22000000"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="150dp"
+                android:background="#474747"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comodo 2"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="5dp"/>
+
+                <org.material.homer.ToggleButton
+                    android:id="@+id/room_2_toggle"
+                    android:layout_width="60dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/room_2_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100kW"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="15dp"
+                    android:padding="10dp"
+                    android:background="#22000000"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="150dp"
+                android:background="#474747"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comodo 3"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="5dp"/>
+
+                <org.material.homer.ToggleButton
+                    android:id="@+id/room_3_toggle"
+                    android:layout_width="60dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/room_3_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100kW"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="15dp"
+                    android:padding="10dp"
+                    android:background="#22000000"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="150dp"
+                android:background="#474747"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comodo 4"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="5dp"/>
+
+                <org.material.homer.ToggleButton
+                    android:id="@+id/room_4_toggle"
+                    android:layout_width="60dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/room_4_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100kW"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="15dp"
+                    android:padding="10dp"
+                    android:background="#22000000"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="150dp"
+                android:background="#474747"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/view"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="189.107.149.25:3000"
+                android:textSize="15dp"
+                android:layout_gravity="center"
+                android:background="#33000000"
+                android:padding="10dp"/>
+
+            <View
+                android:layout_width="15dp"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Conectar"
+                android:textColor="#FFFFFF"
+                android:id="@+id/connect_button"
+                android:paddingLeft="45dp"
+                android:paddingRight="20dp"
+                android:textSize="13dp"
+                android:background="@drawable/button_background"/>
+        </LinearLayout>
+
+
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_alignParentLeft="true"
+           android:layout_alignParentBottom="true"
+           android:layout_alignParentRight="true"
+           android:orientation="horizontal"
+           android:layout_marginBottom="10dp"
+           android:layout_marginLeft="10dp"
+           android:layout_marginRight="10dp">
+
+           <LinearLayout
+               android:layout_width="200dp"
+               android:layout_height="200dp"
+               android:background="@drawable/graph_background"
+               android:orientation="vertical"
+               android:paddingLeft="20dp"
+               android:paddingTop="10dp"
+               android:paddingBottom="10dp"
+               android:paddingRight="20dp">
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:orientation="horizontal"
+                   android:layout_weight="1"
+                   android:gravity="center">
+
+                   <ImageView
+                       android:id="@+id/room_1_icon"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+                       android:src="@drawable/pole"
+                       android:layout_gravity="center"/>
+
+                   <ImageView
+                       android:layout_width="50dp"
+                       android:layout_height="20dp"
+                       android:layout_gravity="center"
+                       android:src="@drawable/graph_green_arrow"
+                       android:layout_marginRight="5dp"/>
+
+                   <LinearLayout
+                       android:layout_width="50dp"
+                       android:layout_height="50dp"
+                       android:orientation="vertical"
+                       android:gravity="center">
+
+                       <ImageView
+                           android:layout_width="25dp"
+                           android:layout_height="25dp"
+                           android:layout_gravity="center"
+                           android:src="@drawable/house"/>
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="Quarto 1"
+                           android:textSize="10dp"
+                           android:typeface="sans"
+                           android:textColor="#FFFFFF"
+                           android:layout_gravity="center"/>
+
+                   </LinearLayout>
+
+               </LinearLayout>
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:orientation="horizontal"
+                   android:layout_weight="1"
+                   android:gravity="center">
+
+                   <ImageView
+                       android:id="@+id/room_2_icon"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+                       android:src="@drawable/pole"
+                       android:layout_gravity="center"/>
+
+                   <ImageView
+                       android:layout_width="50dp"
+                       android:layout_height="20dp"
+                       android:layout_gravity="center"
+                       android:src="@drawable/graph_green_arrow"
+                       android:layout_marginRight="5dp"/>
+
+                   <LinearLayout
+                       android:layout_width="50dp"
+                       android:layout_height="50dp"
+                       android:orientation="vertical"
+                       android:gravity="center">
+
+                       <ImageView
+                           android:layout_width="25dp"
+                           android:layout_height="25dp"
+                           android:layout_gravity="center"
+                           android:src="@drawable/house"/>
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="Quarto 2"
+                           android:textSize="10dp"
+                           android:typeface="sans"
+                           android:textColor="#FFFFFF"
+                           android:layout_gravity="center"/>
+
+                   </LinearLayout>
+
+               </LinearLayout>
+
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:orientation="horizontal"
+                   android:layout_weight="1"
+                   android:gravity="center">
+
+                   <ImageView
+                       android:id="@+id/room_3_icon"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+                       android:src="@drawable/pole"
+                       android:layout_gravity="center"/>
+
+                   <ImageView
+                       android:layout_width="50dp"
+                       android:layout_height="20dp"
+                       android:layout_gravity="center"
+                       android:src="@drawable/graph_green_arrow"
+                       android:layout_marginRight="5dp"/>
+
+                   <LinearLayout
+                       android:layout_width="50dp"
+                       android:layout_height="50dp"
+                       android:orientation="vertical"
+                       android:gravity="center">
+
+                       <ImageView
+                           android:layout_width="25dp"
+                           android:layout_height="25dp"
+                           android:layout_gravity="center"
+                           android:src="@drawable/house"/>
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="Sala"
+                           android:textSize="10dp"
+                           android:typeface="sans"
+                           android:textColor="#FFFFFF"
+                           android:layout_gravity="center"/>
+
+                   </LinearLayout>
+
+               </LinearLayout>
+
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:orientation="horizontal"
+                   android:layout_weight="1"
+                   android:gravity="center">
+
+                   <ImageView
+                       android:id="@+id/room_4_icon"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+                       android:src="@drawable/pole"
+                       android:layout_gravity="center"/>
+
+                   <ImageView
+                       android:layout_width="50dp"
+                       android:layout_height="20dp"
+                       android:layout_gravity="center"
+                       android:src="@drawable/graph_green_arrow"
+                       android:layout_marginRight="5dp"/>
+
+                   <LinearLayout
+                       android:layout_width="50dp"
+                       android:layout_height="50dp"
+                       android:orientation="vertical"
+                       android:gravity="center">
+
+                       <ImageView
+                           android:layout_width="25dp"
+                           android:layout_height="25dp"
+                           android:layout_gravity="center"
+                           android:src="@drawable/house"/>
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="Cozinha"
+                           android:textSize="10dp"
+                           android:typeface="sans"
+                           android:textColor="#FFFFFF"
+                           android:layout_gravity="center"/>
+
+                   </LinearLayout>
+
+               </LinearLayout>
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:paddingLeft="10dp"
+               android:paddingRight="10dp"
+               android:paddingBottom="20dp"
+               android:paddingTop="5dp">
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:orientation="vertical">
+
+                   <ImageView
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+                       android:src="@drawable/batery"
+                       android:layout_marginBottom="10dp"
+                       android:layout_gravity="center"/>
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="Bateria"
+                       android:textSize="11dp"
+                       android:textStyle="bold"
+                       android:typeface="sans"
+                       android:textColor="#FFFFFF"
+                       android:layout_marginTop="-5dp"
+                       android:layout_marginBottom="10dp"
+                       android:layout_gravity="center"/>
+
+                   <org.material.homer.Batery
+                       android:id="@+id/batery"
+                       android:layout_width="40dp"
+                       android:layout_height="80dp"
+                       android:layout_gravity="center" />
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="100kW"
+                       android:textSize="11dp"
+                       android:textStyle="bold"
+                       android:typeface="sans"
+                       android:textColor="#FFFFFF"
+                       android:layout_marginTop="15dp"
+                       android:padding="10dp"
+                       android:layout_gravity="center"
+                       android:background="#22000000"/>
+               </LinearLayout>
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:orientation="vertical">
+
+                   <ImageView
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+                       android:src="@drawable/e_energy"
+                       android:layout_marginBottom="10dp"
+                       android:layout_gravity="center"/>
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="Renovavel"
+                       android:textSize="11dp"
+                       android:textStyle="bold"
+                       android:typeface="sans"
+                       android:textColor="#FFFFFF"
+                       android:layout_marginTop="-5dp"
+                       android:layout_marginBottom="10dp"
+                       android:layout_gravity="center"/>
+
+                   <org.material.homer.Produce
+                       android:id="@+id/produce"
+                       android:layout_width="40dp"
+                       android:layout_height="76dp"
+                       android:layout_gravity="center"
+                       android:layout_marginTop="6dp"/>
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="100kW"
+                       android:textSize="11dp"
+                       android:textStyle="bold"
+                       android:typeface="sans"
+                       android:textColor="#FFFFFF"
+                       android:layout_marginTop="15dp"
+                       android:padding="10dp"
+                       android:layout_gravity="center"
+                       android:background="#22000000"/>
+               </LinearLayout>
+
+           </LinearLayout>
+       </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
