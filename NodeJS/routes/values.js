@@ -140,6 +140,9 @@ router.post('/', function(req, res){
                     total.batt = Math.min(total.batt, battery.max);
                     total.powerh -= req.body.powerh;
                     users[req.cookies.index].powerd -= req.body.powerh;
+                }else{
+                    total.batt += req.body.renewh;
+                    total.batt = Math.min(total.batt, battery.max);
                 }
             }
         }else{ // 0 - carregando
