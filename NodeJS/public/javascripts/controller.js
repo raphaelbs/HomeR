@@ -13,10 +13,15 @@ app.controller('app', function($scope, $http){
     $scope.resource = '/images/rede.png';
 
     var chooseResourceFrom = function(){
-        if($scope.total.user.sw)
+        if($scope.total.user.from)
             $scope.resource = '/images/battery.png';
         else
             $scope.resource = '/images/rede.png';
+
+        if($scope.total.user.sw)
+            $scope.sw = '/images/battery.png';
+        else
+            $scope.sw = '/images/rede.png';
     };
 
     var lastpower, lastrenew;

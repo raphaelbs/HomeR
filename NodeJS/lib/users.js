@@ -5,7 +5,8 @@ var users = [
       renewh : 0,
       powerh : 0,
       powerd : 0,
-      sw : 0
+      sw : 0,
+      from : 0
   },
   {
       "numero" : 2,
@@ -13,7 +14,8 @@ var users = [
       renewh : 0,
       powerh : 0,
       powerd : 0,
-      sw : 0
+      sw : 0,
+      from : 0
   },
   {
       "numero" : 3,
@@ -21,7 +23,8 @@ var users = [
       renewh : 0,
       powerh : 0,
       powerd : 0,
-      sw : 0
+      sw : 0,
+      from : 0
   },
   {
       "numero" : 4,
@@ -29,7 +32,8 @@ var users = [
       renewh : 0,
       powerh : 0,
       powerd : 0,
-      sw : 0
+      sw : 0,
+      from : 0
   }
 ];
 

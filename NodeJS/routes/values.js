@@ -15,17 +15,63 @@ total.users = users;
 var modbus = require('modbus-event')({ debug : false });
 
 modbus.on('update', function(type, address, from, to){
-    if(type === 'coils' && address == ADDR.BATTERY_STATUS)
+    if(type === 'coils' && address == ADDR.BATTERY_STATUS){
         battery.state = to;
-    if(type === 'coils' && address == ADDR.SW.QUARTO)
+        updateUsersWithBatteryEnabled(to);
+    }
+
+    if(type === 'coils' && address == ADDR.SW.QUARTO){
         users[0].sw = to;
-    if(type === 'coils' && address == ADDR.SW.SALA)
+        updateFROM(ADDR.FROM.QUARTO, to);
+    }
+    if(type === 'coils' && address == ADDR.SW.SALA){
         users[1].sw = to;
-    if(type === 'coils' && address == ADDR.SW.COZINHA)
+        updateFROM(ADDR.FROM.SALA, to);
+    }
+    if(type === 'coils' && address == ADDR.SW.COZINHA){
         users[2].sw = to;
-    if(type === 'coils' && address == ADDR.SW.AREA)
+        updateFROM(ADDR.FROM.COZINHA, to);
+    }
+    if(type === 'coils' && address == ADDR.SW.AREA){
         users[3].sw = to;
+        updateFROM(ADDR.FROM.AREA, to);
+    }
+
+    if(type === 'coils' && address == ADDR.FROM.QUARTO)
+        users[0].from = to;
+    if(type === 'coils' && address == ADDR.FROM.SALA)
+        users[1].from = to;
+    if(type === 'coils' && address == ADDR.FROM.COZINHA)
+        users[2].from = to;
+    if(type === 'coils' && address == ADDR.FROM.AREA)
+        users[3].from = to;
 });
+
+function updateFROM(address, state){
+    if(battery.state)
+        modbus.callee(function(client, data, next){
+            client.writeCoil(address, state).then(next);
+        });
+}
+
+function updateUsersWithBatteryEnabled(state){
+    if(users[0].sw)
+        modbus.callee(function(client, data, next){
+            client.writeCoil(ADDR.FROM.QUARTO, state).then(next);
+        });
+    if(users[1].sw)
+        modbus.callee(function(client, data, next){
+            client.writeCoil(ADDR.FROM.SALA,state).then(next);
+        });
+    if(users[2].sw)
+        modbus.callee(function(client, data, next){
+            client.writeCoil(ADDR.FROM.COZINHA,state).then(next);
+        });
+    if(users[3].sw)
+        modbus.callee(function(client, data, next){
+            client.writeCoil(ADDR.FROM.AREA,state).then(next);
+        });
+}
 
 function updateBatteryStatus(status){
     // Salva o estado da bateria = 1
@@ -90,7 +136,8 @@ router.post('/', function(req, res){
                 total.batt = battery.min;
             }else{
                 if(users[req.cookies.index].sw){
-                    total.batt -= Math.max(req.body.powerh - req.body.renewh, 0);
+                    total.batt -= req.body.powerh - req.body.renewh;
+                    total.batt = Math.min(total.batt, battery.max);
                     total.powerh -= req.body.powerh;
                     users[req.cookies.index].powerd -= req.body.powerh;
                 }
