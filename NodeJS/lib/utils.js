@@ -3,7 +3,8 @@
  */
 // Transforma decimal em inteiro com casas para direita
 exports.normalize = function(val, power){
-    val = val.toFixed(2)*power;
+    if(!val) return 0;
+    val = val.toFixed((new String(power)).length - 1)*power;
     return (val >= 32767) ? 32767 : val;
 };
 
@@ -11,6 +12,7 @@ exports.normalize = function(val, power){
 var time = [];
 exports.timeout = function(diff, interval, action, id){
     if(!id) id = 0;
+    if(!time[id]) time[id]=0;
     var now = new Date();
     if(now - time[id] > diff) {
         time[id] = now;

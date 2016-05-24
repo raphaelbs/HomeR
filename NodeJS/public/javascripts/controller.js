@@ -3,7 +3,6 @@
  */
 var app = angular.module('app', []);
 var modularSpeed;
-var httpUploadTime = 500;
 
 app.controller('app', function($scope, $http){
     $scope.powers = 15;
@@ -11,13 +10,20 @@ app.controller('app', function($scope, $http){
     $scope.speed = 0;
     var ts = new Date();
     $scope.color = 'rgba(250, 255, 250, 1)';
-    $scope.resource = '/images/battery-icon.png';
+    $scope.resource = '/images/rede.png';
+
+    var chooseResourceFrom = function(){
+        if($scope.total.user.sw)
+            $scope.resource = '/images/battery.png';
+        else
+            $scope.resource = '/images/rede.png';
+    };
 
     var lastpower, lastrenew;
     modularSpeed = function(speed){
-        var cut = 255 - speed;
+        var cut = 255 - (speed/2.5);
         $scope.$apply(function() {
-            $scope.speed = speed * 10;
+            $scope.speed = speed;
             $scope.color = 'rgba(' + cut + ', 255, ' + cut + ', 1)';
         });
     };
@@ -27,12 +33,12 @@ app.controller('app', function($scope, $http){
         var uptime = now - ts;
         $scope.$apply(function(){
             var val = ($scope.powers * Math.random() * 2).toFixed(2);
-            $scope.powers = (val < 4 ? (5 * (Math.random()+1)).toFixed(2) : val);
-            $scope.powerh += $scope.powers/3600;
+            $scope.powers = Math.max(Math.min(val, 100), (5 * (Math.random()+1))).toFixed(2);
+            $scope.powerh += $scope.powers/1000;
             $scope.time = formatTime(now);
             $scope.uptime = Math.round(uptime / 1000) + 's';
             $scope.renews = $scope.speed/10 || 0;
-            $scope.renewh += $scope.renews/3600;
+            $scope.renewh += $scope.renews/1000;
 
             upload({
                 powerh : $scope.powerh - lastpower,
@@ -48,11 +54,18 @@ app.controller('app', function($scope, $http){
     var lock = false;
     var error = function(data){
         $scope.total.error = true;
-        lock = false; console.log(data.data);
-        window.onbeforeunload = '';
-        window.location = '/desiste.html';
+        lock = false;
+        if(data.data){
+            window.onbeforeunload = '';
+            window.location = '/'+data.data;
+        }
+
     };
-    var succ = function(res){ $scope.total = res.data; lock = false;};
+    var succ = function(res){
+        $scope.total = res.data;
+        lock = false;
+        chooseResourceFrom();
+    };
     var upload = function(data){
         if(lock) return;
         if($scope.total && $scope.total.error){
@@ -96,6 +109,6 @@ document.body.addEventListener("mousemove", function(e) {
     }, rate + 50);
     if(now < t2 + rate) return ;
     t2 = now;
-    modularSpeed && modularSpeed(Math.round(mean) > 100 ? 100 : Math.round(mean));
+    modularSpeed && modularSpeed(Math.min(Math.round(mean), 250));
     mean = 0;
 });

@@ -34,4 +34,13 @@ router.delete('/', function(req, res){
     return res.status(401).end('Senha errada ;)');
 });
 
+router.post('/set', function(req, res){
+    if(!req.body.key || req.body.key !== '57430b208a82e75c071daae1')
+        return res.status(401).end('Não autorizado!');
+    if(!req.body.userId || !req.body.value)
+        return res.status(400).end('Faltando parâmetros');
+    users[req.body.userId].sw = req.body.value;
+    return res.end(users[req.body.userId].sw);
+});
+
 module.exports = router;

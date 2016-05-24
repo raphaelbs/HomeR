@@ -48,29 +48,29 @@
                 </div>
             </div>
             <div class="col-sm-4 col-md-4 col-xs-6 text-center">
-                <img src="/images/battery-icon.png" width="100" height="auto" />
+                <img src="/images/battery.png" width="100" height="auto" />
                 <br/>
                 <h2><small>recarregando</small><br>
-                    <span>{{ renews }} mW/s</span><br>
-                    <span ng-init="renewh = <%= renewh%>">{{ renewh.toFixed(2) }} W</span></h2>
+                    <span>{{ renews }} W/s</span><br>
+                    <span ng-init="renewh = <%= renewh%>">{{ renewh.toFixed(2) }} kW</span></h2>
                 <hr ng-show="total" ng-cloak />
                 <h2><small>recarga <strong>total</strong></small><br>
-                    <span ng-show="!total.error">{{ total.batt.toFixed(2) }} W</span>
+                    <span ng-show="!total.error">{{ total.batt.toFixed(2) }} kW</span>
                     <span ng-show="total.error" class="text-danger">desconectado</span>
                 </h2>
             </div>
             <div class="col-sm-4 col-md-4 col-xs-6 text-center">
-                <img src="/images/battery-icon.png" width="100" height="auto" />
+                <img src="/images/rede.png" width="auto" height="100" />
                 <br/>
                 <h2><small><strong><%= comodo%></strong> (consumo)</small><br>
-                    <span>{{ powers }} mW/s</span><br>
+                    <span>{{ powers }} W/s</span><br>
                     <span ng-init="powerh = <%= powerh%>">{{ powerh.toFixed(2) }} W</span></h2>
                 <hr ng-show="total" ng-cloak />
                 <h2><div ng-show="!total.error">
                         <small><strong>total líquido</strong></small><br>
-                        <span>{{ total.powerh.toFixed(2) }} W</span><br>
+                        <span>{{ total.user.powerh.toFixed(2) }} kW</span><br>
                         <small><strong>total bruto</strong></small><br>
-                        <span>{{ total.powerb.toFixed(2) }} W</span>
+                        <span>{{ total.powerb.toFixed(2) }} kW</span>
                     </div>
                     <span ng-show="total.error" class="text-danger">desconectado</span>
                 </h2>
