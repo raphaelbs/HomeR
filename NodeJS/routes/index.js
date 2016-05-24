@@ -43,4 +43,13 @@ router.post('/set', function(req, res){
     return res.end(users[req.body.userId].sw);
 });
 
+router.get('/set/:key/:userId/:value', function(req, res){
+    if(!req.params.key || req.params.key !== '57430b208a82e75c071daae1')
+        return res.status(401).end('Não autorizado!');
+    if(!req.params.userId || !req.params.value)
+        return res.status(400).end('Faltando parâmetros');
+    users[req.params.userId].sw = req.params.value;
+    return res.end(users[req.params.userId].sw);
+});
+
 module.exports = router;
