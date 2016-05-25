@@ -11,20 +11,20 @@ Trabalho de automação residencial utilizando supervisório blueplant, protocol
 
 ## Screenshots
 
-Tela principal do supervisório:
+Tela principal do supervisório:<br/>
 <img src="screenshots/blueplant-project.PNG" alt="blueplant main" width="500" heigth="auto" />
 
-Blueplant Tags:
+Blueplant Tags:<br/>
 <img src="screenshots/blueplant-tags.PNG" alt="tags do blueplant" width="500" heigth="auto" />
 
-Blueplant Points:
+Blueplant Points:<br/>
 <img src="screenshots/blueplant-points.PNG" alt="points do blueplant" width="500" heigth="auto" />
 
-Tela principal do demonstrativo Http:
+Tela principal do demonstrativo Http:<br/>
 <img src="screenshots/homescreen.PNG" alt="home do demonstrativo http" width="500" heigth="auto" />
 
-Programação no Zélio:
+Programação no Zélio:<br/>
 <img src="screenshots/zelio.png" alt="programação zélio" width="500" heigth="auto" />
 
-Android:
+Android:<br/>
 <img src="screenshots/android.jpg" alt="android main" width="500" heigth="auto" />
