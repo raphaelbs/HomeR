@@ -28,3 +28,6 @@ Programação no Zélio:<br/>
 
 Android:<br/>
 <img src="screenshots/android.jpg" alt="android main" width="500" heigth="auto" />
+
+## Licença
+[MIT](./LICENSE)
