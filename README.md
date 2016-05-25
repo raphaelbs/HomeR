@@ -15,16 +15,16 @@ Tela principal do supervisório:
 <img src="screenshots/blueplant-project.PNG" alt="blueplant main" width="500" heigth="auto" />
 
 Blueplant Tags:
-<img src="screenshots/blueplant-tags.PNG" alt="blueplant main" width="500" heigth="auto" />
+<img src="screenshots/blueplant-tags.PNG" alt="tags do blueplant" width="500" heigth="auto" />
 
 Blueplant Points:
-<img src="screenshots/blueplant-points.PNG" alt="blueplant main" width="500" heigth="auto" />
+<img src="screenshots/blueplant-points.PNG" alt="points do blueplant" width="500" heigth="auto" />
 
 Tela principal do demonstrativo Http:
-<img src="screenshots/homescreen.PNG" alt="blueplant main" width="500" heigth="auto" />
+<img src="screenshots/homescreen.PNG" alt="home do demonstrativo http" width="500" heigth="auto" />
 
 Programação no Zélio:
-<img src="screenshots/zelio.png" alt="blueplant main" width="500" heigth="auto" />
+<img src="screenshots/zelio.png" alt="programação zélio" width="500" heigth="auto" />
 
 Android:
-<img src="screenshots/android.jpg" alt="blueplant main" width="500" heigth="auto" />
+<img src="screenshots/android.jpg" alt="android main" width="500" heigth="auto" />
