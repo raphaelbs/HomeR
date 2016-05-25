@@ -5,25 +5,26 @@ Trabalho de automação residencial utilizando supervisório blueplant, protocol
 [Gustavo Domingueti](https://github.com/GustavoDominguetti), [Pedro Henrique](https://www.facebook.com/pedro.hc.do), [Raphael Brandão](https://www.facebook.com/raphaelbs)
 
 ## Demo
-[Apresentação .pptx](https://github.com/raphaelbs/HomeR/blob/master/Trabalho%20de%20Dom%C3%B3tica.pptx)
+[Apresentação .pptx](./Trabalho%20de%20Dom%C3%B3tica.pptx)
 
 [Youtube](https://youtu.be/CZUL37YRlck)
 
 ## Screenshots
 
 Tela principal do supervisório:
-![blueplant main](https://github.com/raphaelbs/HomeR/blob/master/screenshots/blueplant-project.PNG)
+<img src="screenshots/blueplant-project.PNG" alt="blueplant main" width="500" heigth="auto" />
 
 Blueplant Tags:
-![blueplant points](https://github.com/raphaelbs/HomeR/blob/master/screenshots/blueplant-tags.PNG)
+<img src="screenshots/blueplant-tags.PNG" alt="blueplant main" width="500" heigth="auto" />
 
 Blueplant Points:
-![blueplant points](https://github.com/raphaelbs/HomeR/blob/master/screenshots/blueplant-points.PNG)
+<img src="screenshots/blueplant-points.PNG" alt="blueplant main" width="500" heigth="auto" />
 
 Tela principal do demonstrativo Http:
-![blueplant points](https://github.com/raphaelbs/HomeR/blob/master/screenshots/homescreen.PNG)
+<img src="screenshots/homescreen.PNG" alt="blueplant main" width="500" heigth="auto" />
 
 Programação no Zélio:
-![blueplant points](https://github.com/raphaelbs/HomeR/blob/master/screenshots/zelio.png)
+<img src="screenshots/zelio.png" alt="blueplant main" width="500" heigth="auto" />
 
 Android:
+<img src="screenshots/android.jpg" alt="blueplant main" width="500" heigth="auto" />
